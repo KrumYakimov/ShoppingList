@@ -1,0 +1,9 @@
+# Frontend
+$ docker build -f frontend/Dockerfile-fe -t fikone/frontend-image .
+$ docker push fikone/frontend-image
+
+# Backend
+docker build -f backend/Dockerfile-be -t fikone/backend-image .
+docker push fikone/backend-image
+
+

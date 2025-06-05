@@ -1,0 +1,46 @@
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=max
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    volumes:
+      - data:/data/db
+    networks:
+      - shoppinglistapp-network
+
+  backend:
+    image: fikone/backend-image
+    container_name: backend
+    ports:
+      - "80:80"
+    environment:
+      - MONGO_URI=mongodb://max:secret@mongodb:27017/list-products?authSource=admin
+    volumes:
+      - logs:/app/logs
+      - backend_node_modules:/app/node_modules
+    depends_on:
+      - mongodb
+    networks:
+      - shoppinglistapp-network
+
+  frontend:
+    image: fikone/frontend-image
+    container_name: frontend
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./frontend/src:/app/src            
+    depends_on:
+      - backend
+    networks:
+      - shoppinglistapp-network
+
+volumes:
+  data:
+  logs:
+  backend_node_modules:
+
+networks:
+  shoppinglistapp-network:
